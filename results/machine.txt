@@ -1,0 +1,9 @@
+date: 2026-09-30T05:48:25Z
+openjdk version "21.0.10" 2026-01-20
+OpenJDK Runtime Environment (build 21.0.10+7-Ubuntu-124.04)
+OpenJDK 64-Bit Server VM (build 21.0.10+7-Ubuntu-124.04, mixed mode, sharing)
+CPU(s):                                  2
+Model name:                              Intel(R) Xeon(R) Processor @ 2.10GHz
+L1d cache:                               96 KiB (2 instances)
+L2 cache:                                4 MiB (2 instances)
+L3 cache:                                260 MiB (1 instance)
