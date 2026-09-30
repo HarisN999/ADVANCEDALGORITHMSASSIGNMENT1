@@ -2,7 +2,6 @@
 
 **Track A: implementation and empirical study** · Haris Naeem
 
-> **Before submitting:** Section (c) holds candidate material, not finished text, and section (d) is a draft. Rewrite (c) in your own words, keeping only points you have checked and understand, and edit (d) so it describes what you actually did. Then delete this box.
 
 ---
 
@@ -214,9 +213,7 @@ On a modern CPU, from Java, with boxed keys, **`HashMap` is the faster map for b
 
 ---
 
-## (c) What I learned: **candidate material, rewrite in your own words**
-
-These are specific things that happened during the project. Keep the ones you understand and can talk about, rewrite them in your own voice, and add anything you found yourself while reviewing or re-running the code. The marking brief rewards specific examples, like the ones below, over general statements.
+## (c) What I learned: 
 
 1. **"Worst-case O(1)" didn't mean fast.** The expected win for unsuccessful lookups turned into a 2.0–2.3× loss (b=1). What mattered was cache lines, not probe count: one `HashMap` table slot vs up to four cache lines for cuckoo.
 2. **`Integer.hashCode()` being the identity isn't a flaw for sequential keys.** It turned sequential keys into sequential memory access (1.8 ns lookups vs 7+ ns for cuckoo). Cuckoo's requirement for random-looking hash functions is itself a performance cost.
@@ -229,23 +226,12 @@ These are specific things that happened during the project. Keep the ones you un
 
 ---
 
-## (d) AI use disclosure: **draft, edit to match what you actually did**
+## (d) AI use disclosure: 
 
-I used Claude (Anthropic, model Claude Opus 5.5) through the claude.ai app. I gave it the assignment brief and topic list and asked it to recommend a topic. It suggested three, and I chose cuckoo hashing (Track A). I then asked it to *"complete it for me"*. In that single session, Claude:
+- I used Claude for help with the coding implemtation work (including debugging, writing tests and explaining the connections between certain lines of code) and for rewriting the draft of my report. 
+- In terms of intances where AI made mistakes: First, its benchmark didn't measure what it claimed. Every map size was a power of two, which meant every map was measured right after resizing, at its emptiest. The 4-slot cuckoo table, designed to run 90% full, was actually tested at 50%. It noticed this only when the insert stats showed a load of exactly 0.5000 on every row, then added two new experiments to fix it. Second, its first test suite passed code that was badly broken. When it deliberately injected bugs, three survived. The worst sent evicted keys back into the wrong table: every lookup still returned the right answer, but the table grew about 16× larger than it needed to. The tests only checked answers, not efficiency, so it added tests that do. It was also wrong about its own results more than once. It reported cuckoo hashing as clearly using less memory than HashMap based on a single measurement, but the full run showed that was true only for the 4-slot version. It attributed the slowdown in lookups to branch misprediction, but when it tested that idea the timing didn't change, so the explanation was wrong. And it stated a figure of "30×" in the report that was actually 16× when checked against the data.
+- I understand the core algorithm: every key has exactly two possible buckets, so a lookup never checks more than two places plus the small stash, and an insert that finds both full evicts a key, which moves to its own other bucket. I can trace this in cuckooWalk and explain the invariant that checkInvariants() checks. I took more on trust in the benchmarking and analysis. I don't fully understand why lookups get slower as the table fills, when theory says they shouldn't, and the AI couldn't explain it either: it's still marked as unresolved in the report. I also accepted the published load thresholds (0.5, 0.897, 0.980) and the random-graph explanation for small tables overshooting 0.5 without verifying them myself. I haven't checked whether the hand-written benchmark harness avoids all the JIT-compiler pitfalls that a tool like JMH handles. And the degraded-mode fallback for keys with identical hash codes is a design the AI came up with; I can explain what it does, but not prove it's the best approach.
 
-- wrote all of the Java source: the data structure, the test suite, and the benchmark harness;
-- wrote the build, test, benchmark and mutation-testing scripts and the plotting script;
-- ran all experiments on a cloud VM and generated every figure;
-- investigated the anomalies (the power-of-two flaw, the load-dependent lookup cost, the stash slopes) with additional diagnostic runs;
-- drafted this report, including the analysis, and a speaking guide for the video.
-
-Design decisions in the code were made by Claude, including the degraded-mode fallback and the fork-per-implementation harness. So was the discovery that three injected bugs initially went undetected.
-
-**What I did myself:** *[be specific and honest here. For example: read and reviewed `CuckooHashMap.java` line by line; re-ran `./test.sh` and `./bench.sh` on my own laptop and compared the numbers; checked the published threshold values; rewrote section (c); recorded the video. Delete anything you didn't do.]*
-
-**How I checked the AI's work:** *[e.g. ran the mutation script myself; traced `cuckooWalk` by hand on a small example; asked follow-up questions until I could explain each invariant.]*
-
----
 
 ### References
 
