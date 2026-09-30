@@ -1,5 +1,7 @@
 # Cuckoo Hashing in Java: Implementation and Empirical Study
 
+VIDEO Walkthrough: https://youtu.be/0JmPvndq-E4?si=o-xv8GDJS3qLzhEC
+
 Programming Assignment 1, Track A (implementation and empirical study).
 
 This is a cuckoo hash map (`CuckooHashMap<K, V>`) with two hash functions, configurable bucket size, a small stash, and automatic growth. It's benchmarked against `java.util.HashMap`. The full write-up is in [`REPORT.md`](REPORT.md).

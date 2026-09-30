@@ -3,6 +3,8 @@
 **Track A: implementation and empirical study** · Haris Naeem
 
 
+VIDEO Walkthrough: https://youtu.be/0JmPvndq-E4?si=o-xv8GDJS3qLzhEC
+
 ---
 
 ## (a) What I built
